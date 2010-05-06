@@ -1,0 +1,10 @@
+development: &defaults
+  database: 'js_host_development'
+  adapter: mysql
+  host: localhost
+  user: foo
+  password: bar
+  encoding: UTF8
+
+production:
+  <<: *defaults
