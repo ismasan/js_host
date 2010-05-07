@@ -18,24 +18,25 @@ module JsHost
       halt 401, "401 UNAUTHORIZED: #{error.message}\n"
     end
 
-    get '/' do
+    get '/?' do
       'Jem API'
     end
 
     # Not authenticated
     post '/accounts' do
-      raise MissingParameters unless params[:email]
-      raise MissingParameters unless params[:password]
+      raise MissingParameters, "missing email" unless params[:email]
+      raise MissingParameters, "missing password" unless params[:password]
 
       # Create account
       account = Account.create(params)
-
+      token = account.tokens.first
+      
       content_type 'application/json'
 
       return JSON.generate({
         :id => account.id,
-        :key => account.token.key,
-        :secret => account.token.secret
+        :key => token.key,
+        :secret => token.secret
       })
     end
 
