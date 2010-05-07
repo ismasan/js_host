@@ -50,7 +50,11 @@ module JsHost
       has_one :hosted_file, :dependent => :destroy
 
       scope :sorted_by_version, order("major DESC, minor DESC, patch DESC")
-
+      
+      def etag
+        Digest::MD5.hexdigest(version_string + hosted_file.body)
+      end
+      
       def version_string
         [major, minor, patch].join('.')
       end

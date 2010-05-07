@@ -4,6 +4,7 @@ require 'sinatra/base'
 require 'logger'
 require 'active_record'
 require 'closure-compiler'
+require 'digest/sha1'
 
 ActiveRecord::Base.establish_connection(
   YAML.load_file('./config/database.yml')[Sinatra::Base.environment.to_s]

@@ -28,6 +28,7 @@ module JsHost
       end
       
       def version_headers(version)
+        etag version.etag
         response['X-Version'] = version.version_string
       end
       
