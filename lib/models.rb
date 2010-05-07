@@ -64,6 +64,10 @@ module JsHost
         [major, minor, patch].join('.')
       end
       
+      def version_string=(str)
+        self.major, self.minor, self.patch = str.split('.')
+      end
+      
       def to_param
         version_string
       end
@@ -96,8 +100,8 @@ module JsHost
       private
 
       def generate_key_and_secret
-        self.key = 'foobar'
-        self.secret = 'reallysecret'
+        self.key = ActiveSupport::SecureRandom.hex(20)
+        self.secret = ActiveSupport::SecureRandom.hex(20)
       end
     end
 
