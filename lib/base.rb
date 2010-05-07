@@ -2,6 +2,8 @@ module JsHost
   
   class Base < Sinatra::Base
     
+    include JsHost::Models
+    
     set :root, APP_ROOT
     set :views, APP_ROOT + '/views'
     set :public, APP_ROOT + '/public'
