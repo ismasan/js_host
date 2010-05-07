@@ -46,7 +46,14 @@ module JsHost
     end
     
     module Api
-      
+      def authenticate(block)
+        request = Authentication::Request.new('POST', env["REQUEST_PATH"], params)
+        token = request.authenticate do |key|
+          Token.find_by_key(key)
+        end
+
+        return token
+      end
     end
     
   end

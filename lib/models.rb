@@ -41,11 +41,11 @@ module JsHost
       include Sluggable
       
       has_many :versions, :dependent => :destroy
+      belongs_to :account
       
       def latest_version
         versions.desc.first
       end
-      
     end
     
     class Version < ActiveRecord::Base
@@ -87,6 +87,35 @@ module JsHost
       
       belongs_to :version
     end
+
+    class Token < ActiveRecord::Base
+      belongs_to :account
+
+      before_validation :generate_key_and_secret
+
+      private
+
+      def generate_key_and_secret
+        self.key = 'foobar'
+        self.secret = 'reallysecret'
+      end
+    end
+
+    class Account < ActiveRecord::Base
+      has_many :projects
+      has_many :tokens
+
+      after_create :generate_token
+
+      private
+
+      def generate_token
+        token = Token.create
+        self.tokens << token
+      end
+    end
+
+
 
   end
   
