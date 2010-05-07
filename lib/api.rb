@@ -1,11 +1,11 @@
-require 'json'
-require 'signature'
-
 module JsHost
   
   # API for command line tool
   # Create accounts, push files
   class Api < Base
+    
+    disable :show_exceptions
+    disable :raise_errors
     
     class MissingParameters < RuntimeError; end
 

@@ -5,6 +5,8 @@ require 'logger'
 require 'active_record'
 require 'closure-compiler'
 require 'digest/sha1'
+require 'json'
+require 'signature'
 
 ActiveRecord::Base.establish_connection(
   YAML.load_file('./config/database.yml')[Sinatra::Base.environment.to_s]
