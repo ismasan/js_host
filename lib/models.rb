@@ -15,19 +15,17 @@ module JsHost
     
     class Project < ActiveRecord::Base
       # belongs_to :account
-      has_many :hosted_files, :dependent => :destroy
+      has_many :versions, :dependent => :destroy
     end
 
     class HostedFile < ActiveRecord::Base
-      belongs_to :project
-      has_many :versions, :dependent => :destroy
-
-      # name, url, etc
+      belongs_to :version
     end
 
     class Version < ActiveRecord::Base
 
-      belongs_to :hosted_file
+      belongs_to :project
+      has_one :hosted_file, :dependent => :destroy
 
       scope :sorted_by_version, order("major DESC, minor DESC, patch DESC")
 

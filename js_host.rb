@@ -9,10 +9,6 @@ ActiveRecord::Base.establish_connection(
   YAML.load_file('./config/database.yml')[Sinatra::Base.environment.to_s]
 )
 
-
-# require 'helpers'
-# require 'models'
-
 module JsHost
   
   APP_ROOT = File.dirname(__FILE__)

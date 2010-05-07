@@ -6,26 +6,32 @@ class CreateProjectsFilesVersions < ActiveRecord::Migration
       t.timestamps
     end
     
-    create_table :hosted_files do |t|
-      t.references :project
-      t.string :name
-      t.string :slug
-      t.timestamps
-    end
-    
     create_table :versions do |t|
-      t.references :hosted_file
+      t.references :project
       t.integer :major, :default => 0
       t.integer :minor, :default => 0
       t.integer :patch, :default => 0
+      t.text :manifest
+      t.timestamps
+    end
+    
+    create_table :hosted_files do |t|
+      t.references :version
+      t.string :name
+      t.string :slug
+      t.string :content_type
       t.text :body
       t.timestamps
     end
     
     add_index :projects, :slug
     add_index :hosted_files, :slug
-    add_index :hosted_files, :project_id
-    add_index :versions, :hosted_file_id
+    add_index :hosted_files, :version_id
+    add_index :versions, :project_id
+    
+    add_index :versions, [:major, :minor, :patch]
+    add_index :versions, [:major, :minor]
+    
     add_index :versions, :major
     add_index :versions, :minor
     add_index :versions, :patch
