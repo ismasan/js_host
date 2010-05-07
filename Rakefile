@@ -31,18 +31,19 @@ namespace :db do
   
   desc 'Populate DB'
   task :populate => :environment do
-    project = Project.create!(:name => 'test', :slug => 'test')
-    file = project.hosted_files.create!(:name => 'test file', :slug => 'test-file')
-    
-    v = []
-    v << file.versions.create!(:body => File.read('./db/test_files/test-0.0.1.js'), :major => 0, :minor => 0, :patch => 1)
-    v << file.versions.create!(:body => File.read('./db/test_files/test-0.2.0.js'), :major => 0, :minor => 2, :patch => 0)
-    v << file.versions.create!(:body => File.read('./db/test_files/test-1.2.3.js'), :major => 1, :minor => 2, :patch => 3)
+    project = Project.create!(:name => 'Demo')
     
     puts "Project #{project.slug}"
-    puts "File #{file.slug}"
-    v.each do |version|
-      puts "Version #{[version.major, version.minor, version.patch].join('.')}"
+    
+    ['0.0.1', '0.2.0', '1.2.3'].each do |v|
+      major, minor, patch = v.split('.')
+      f = project.versions.create!(
+        :major => major, 
+        :minor => minor, 
+        :patch => patch,
+        :hosted_file => HostedFile.new(:name => 'Test file', :body => File.read("./db/test_files/test-#{v}.js"))
+      )
+      puts "#{project.to_param}/#{f.to_param}/#{f.hosted_file.to_param}.js"
     end
     
   end
