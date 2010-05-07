@@ -10,6 +10,7 @@ module JsHost
     class MissingParameters < RuntimeError; end
 
     helpers do
+      include Helpers::Base
       include Helpers::Api
     end
     
@@ -21,6 +22,8 @@ module JsHost
     error MissingParameters do |controller|
       halt 500, controller.env["sinatra.error"].message
     end
+    
+    
 
     get '/?' do
       'Jem API'
@@ -55,10 +58,9 @@ module JsHost
       })
     end
 
-    post '/projects' do
+    put '/projects' do
       account = authenticate!
-
-      return "Not done yet"
+      account.create_or_update_project!(params[:manifest], params[:file])
     end
   end
   
