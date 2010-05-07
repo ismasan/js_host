@@ -2,6 +2,30 @@ module JsHost
   
   module Models
     
+    module Sluggable
+      
+      def self.included(base)
+        base.before_save :sluggify
+        base.validates_presence_of :name
+        base.extend ClassMethods
+      end
+      
+      def sluggify
+        write_attribute :slug, self.name.parameterize
+      end
+      
+      def to_param
+        slug
+      end
+      
+      module ClassMethods
+        
+        def find_by_slug!(slug)
+          find_by_slug(slug) or raise ActiveRecord::RecordNotFound.new("No #{self.name} with slug '#{slug}'")
+        end
+      end
+    end
+    
     class VersionNotFound < StandardError
       def initialize(conditions)
         @conditions = conditions
