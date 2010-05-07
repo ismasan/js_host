@@ -22,4 +22,7 @@ module JsHost
   autoload :AssetHost, 'asset_host'
   autoload :Api, 'api'
   
+  LOGGER = Logger.new(STDOUT)
+  LOGGER.level = Logger::DEBUG
+  ActiveRecord::Base.logger = LOGGER
 end
