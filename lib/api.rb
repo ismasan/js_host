@@ -42,9 +42,9 @@ module JsHost
 
     # Authenticated
     get '/account/:id' do
-      account = authenticate.token
+      account = authenticate!
 
-      halt 200, JSON.generate({
+      JSON.generate({
         :id => account.id,
         :key => account.key,
         :secret => account.secret
@@ -52,7 +52,7 @@ module JsHost
     end
 
     post '/projects' do
-      account = authenticate.token
+      account = authenticate!
 
       return "Not done yet"
     end
