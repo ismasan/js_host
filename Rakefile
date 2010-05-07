@@ -48,3 +48,8 @@ namespace :db do
     
   end
 end
+
+desc 'Console'
+task :console do
+  system "irb -r lib/console.rb -I lib/"
+end
