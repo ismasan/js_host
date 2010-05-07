@@ -1,3 +1,5 @@
 active_record --version 3.0.0.beta3
 sinatra
 closure-compiler
+signature
+json
