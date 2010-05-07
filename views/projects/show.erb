@@ -7,7 +7,7 @@
 <h2>Versions</h2>
 
 <ul class="list versions">
-  <% current_project.versions.desc.each do |version| %>
+  <% current_project.versions.abc.each do |version| %>
   <li>
     <a href="<%= version_path(version, false, 3) %>" title="Download <%= version.version_string %>"><%= version.version_string %></a> 
     (<a href="<%= version_path(version, true, 3) %>" title="Download <%= version.version_string %>">min</a>)

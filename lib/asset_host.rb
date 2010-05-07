@@ -36,7 +36,7 @@ module JsHost
     get '/?' do
       content_type 'text/html'
       page_title 'All projects'
-      @projects = Project.desc.includes(:account)
+      @projects = Project.abc.includes(:account)
       erb :"projects/index"
     end
     

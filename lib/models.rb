@@ -43,10 +43,10 @@ module JsHost
       has_many :versions, :dependent => :destroy
       belongs_to :account
       
-      scope :desc, order('updated_at DESC')
+      scope :abc, order('updated_at DESC')
       
       def latest_version
-        versions.desc.first
+        versions.abc.first
       end
     end
     
@@ -54,9 +54,8 @@ module JsHost
       belongs_to :project
       has_one :hosted_file, :dependent => :destroy
       
-      scope :desc, order("major DESC, minor DESC, patch DESC")
-      scope :asc, order("major ASC, minor ASC, patch ASC")
-      
+      scope :abc, order("major DESC, minor DESC, patch DESC")
+            
       def self.find_by_version_string(version_string)
         major, minor, patch = version_string.split('.')
         where(:major => major, :minor => minor, :patch => patch).first
@@ -83,7 +82,7 @@ module JsHost
         r = r.where(:minor => minor) if minor
         r = r.where(:patch => patch) if patch
 
-        r.desc.includes(:hosted_file).first
+        r.abc.includes(:hosted_file).first
       end
       
       def self.resolve_latest!(*args)
