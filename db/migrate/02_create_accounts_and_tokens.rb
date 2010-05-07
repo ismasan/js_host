@@ -3,12 +3,14 @@ class CreateAccountsAndTokens < ActiveRecord::Migration
     create_table :accounts do |t|
       t.string :email
       t.string :password
+      t.timestamps
     end
 
     create_table :tokens do |t|
       t.references :account
       t.string :key
       t.string :secret
+      t.timestamps
     end
 
     add_column :projects, :account_id, :integer
