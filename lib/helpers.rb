@@ -6,7 +6,7 @@ module JsHost
     
     module Base
       def logger
-        LOGGER
+        JsHost::LOGGER
       end
       
       def page_title(title = nil)
@@ -43,17 +43,29 @@ module JsHost
         "/#{version.project.to_param}/#{v}/#{version.hosted_file.to_param}#{m}.js"
       end
       
+      def project_path(project)
+        "/#{project.to_param}"
+      end
+      
     end
     
     module Api
       include JsHost::Models
-      def authenticate!
-        request = Signature::Request.new('POST', env["REQUEST_PATH"], params)
-        token = request.authenticate do |key|
-          Token.find_by_key(key)
+      
+      def hash_query_string
+        request.query_string.split('&').inject({}) do |mem,e|
+          s = e.split('=')
+          mem[s.first] = s.last
+          mem
         end
-
-        return token.account
+      end
+      
+      def authenticate!
+        request = Signature::Request.new('PUT', env["REQUEST_PATH"], hash_query_string)
+        token = request.authenticate do |key|
+          Token.find_by_key!(key)
+        end
+        token.account
       end
     end
     
