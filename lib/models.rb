@@ -110,8 +110,7 @@ module JsHost
       private
 
       def generate_token
-        token = Token.create
-        self.tokens << token
+        self.tokens.create
       end
     end
 
