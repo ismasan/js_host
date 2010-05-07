@@ -43,18 +43,24 @@ module JsHost
       has_many :versions, :dependent => :destroy
       belongs_to :account
       
+      scope :desc, order('updated_at DESC')
+      
       def latest_version
         versions.desc.first
       end
     end
     
     class Version < ActiveRecord::Base
-
       belongs_to :project
       has_one :hosted_file, :dependent => :destroy
-
+      
       scope :desc, order("major DESC, minor DESC, patch DESC")
       scope :asc, order("major ASC, minor ASC, patch ASC")
+      
+      def self.find_by_version_string(version_string)
+        major, minor, patch = version_string.split('.')
+        where(:major => major, :minor => minor, :patch => patch).first
+      end
       
       def etag
         Digest::MD5.hexdigest(version_string + hosted_file.body)
@@ -110,6 +116,26 @@ module JsHost
       has_many :tokens
 
       after_create :generate_token
+
+      def create_or_update_project!(manifest, file)
+        manifest_json = JSON.parse(manifest)
+
+        transaction do
+          project = projects.find_or_create_by_name(manifest_json['project'])
+          version = project.versions.find_by_version_string(manifest_json['version'])
+          
+          raise 'Version already exists' if version
+          
+          project.versions.create!(
+            :version_string => manifest_json['version'],
+            :manifest => manifest,
+            :hosted_file => HostedFile.new(
+              :name => manifest['file'],
+              :body => file
+            )
+          )
+        end
+      end
 
       private
 
