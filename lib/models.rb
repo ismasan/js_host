@@ -21,12 +21,12 @@ module JsHost
       module ClassMethods
         
         def find_by_slug!(slug)
-          find_by_slug(slug) or raise ActiveRecord::RecordNotFound.new("No #{self.name} with slug '#{slug}'")
+          find_by_slug(slug) or raise Sinatra::NotFound.new("No #{self.name} with slug '#{slug}'")
         end
       end
     end
     
-    class VersionNotFound < StandardError
+    class VersionNotFound < Sinatra::NotFound
       def initialize(conditions)
         @conditions = conditions
         super
@@ -42,6 +42,10 @@ module JsHost
       
       has_many :versions, :dependent => :destroy
       
+      def latest_version
+        versions.desc.first
+      end
+      
     end
     
     class Version < ActiveRecord::Base
@@ -49,7 +53,8 @@ module JsHost
       belongs_to :project
       has_one :hosted_file, :dependent => :destroy
 
-      scope :sorted_by_version, order("major DESC, minor DESC, patch DESC")
+      scope :desc, order("major DESC, minor DESC, patch DESC")
+      scope :asc, order("major ASC, minor ASC, patch ASC")
       
       def etag
         Digest::MD5.hexdigest(version_string + hosted_file.body)
@@ -68,7 +73,7 @@ module JsHost
         r = r.where(:minor => minor) if minor
         r = r.where(:patch => patch) if patch
 
-        r.sorted_by_version.includes(:hosted_file).first
+        r.desc.includes(:hosted_file).first
       end
       
       def self.resolve_latest!(*args)

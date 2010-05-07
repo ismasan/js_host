@@ -3,6 +3,7 @@ module JsHost
   class AssetHost < Base
 
     helpers do
+      include Helpers::Base
       include Helpers::AssetHost
     end
     
@@ -11,6 +12,10 @@ module JsHost
       # Set caching headers
       cache_long 5.minutes
       content_type 'text/javascript'
+    end
+    
+    not_found do
+      'File not found'
     end
     
     RESPOND_MINIFIED = proc do
@@ -23,8 +28,11 @@ module JsHost
       current_version.hosted_file.body
     end
     
-    get '/' do
-      'Hello'
+    # Project info, manifest, version list
+    get '/:project_id' do
+      content_type 'text/html'
+      page_title current_project.name
+      erb :"projects/show"
     end
     
     # major, minor, patch ::::::::::::::::::::::::::

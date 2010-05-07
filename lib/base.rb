@@ -3,6 +3,8 @@ module JsHost
   class Base < Sinatra::Base
     
     set :root, APP_ROOT
+    set :views, APP_ROOT + '/views'
+    set :public, APP_ROOT + '/public'
     enable :logging
     enable :dump_errors
     enable :raise_errors
