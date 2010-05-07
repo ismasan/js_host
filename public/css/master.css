@@ -1,0 +1,22 @@
+html, body, table, form, p, ul, ol, dt, dd, dl {padding:0;margin:0;}
+
+body {
+  font-family: 'lucida grande', 'helvetica', 'arial';
+  font-size: 14px;
+  color: #333;
+  background: #123;
+}
+
+p {margin-bottom: 1.5em;}
+
+#wrapper {
+  margin: 20px auto 0 auto;
+  width: 900px;
+  background: #eee;
+  border: solid silver 20px;
+  border-radius: 10px;
+}
+
+#primary {
+  padding: 40px;
+}
