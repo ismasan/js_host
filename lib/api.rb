@@ -23,7 +23,7 @@ module JsHost
     end
 
     # Not authenticated
-    post '/accounts' do
+    put '/accounts' do
       raise MissingParameters, "missing email" unless params[:email]
       raise MissingParameters, "missing password" unless params[:password]
 
