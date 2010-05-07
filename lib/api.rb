@@ -17,6 +17,10 @@ module JsHost
       error = controller.env["sinatra.error"]
       halt 401, "401 UNAUTHORIZED: #{error.message}\n"
     end
+    
+    error MissingParameters do |controller|
+      halt 500, controller.env["sinatra.error"].message
+    end
 
     get '/?' do
       'Jem API'
