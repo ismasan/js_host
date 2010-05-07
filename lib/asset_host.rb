@@ -33,7 +33,7 @@ module JsHost
     end
     
     # Project info, manifest, version list
-    get '/:project_id' do
+    get '/:project_id?' do
       content_type 'text/html'
       page_title current_project.name
       erb :"projects/show"
