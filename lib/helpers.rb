@@ -46,8 +46,9 @@ module JsHost
     end
     
     module Api
+      include JsHost::Models
       def authenticate!
-        request = Authentication::Request.new('POST', env["REQUEST_PATH"], params)
+        request = Signature::Request.new('POST', env["REQUEST_PATH"], params)
         token = request.authenticate do |key|
           Token.find_by_key(key)
         end
