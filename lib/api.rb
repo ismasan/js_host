@@ -37,7 +37,7 @@ module JsHost
       
       content_type 'application/json'
 
-      return JSON.generate({
+      JSON.generate({
         :id => account.id,
         :key => token.key,
         :secret => token.secret
