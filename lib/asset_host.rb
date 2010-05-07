@@ -32,6 +32,14 @@ module JsHost
       current_version.hosted_file.body
     end
     
+    # All projects for now
+    get '/?' do
+      content_type 'text/html'
+      page_title 'All projects'
+      @projects = Project.desc.includes(:account)
+      erb :"projects/index"
+    end
+    
     # Project info, manifest, version list
     get '/:project_id?' do
       content_type 'text/html'

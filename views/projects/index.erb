@@ -1,0 +1,10 @@
+<h1>All projects</h1>
+
+<ul class="list projects">
+  <% @projects.each do |project| %>
+  <li>
+    <%= project.account.email %> | 
+    <a href="<%= project_path(project) %>"><%= project.name %> (<%= project.versions.count %> versions)</a>
+  </li>
+  <% end %>
+</ul>
