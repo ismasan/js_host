@@ -1,7 +1,11 @@
 module JsHost
   
   class AssetHost < Base
-
+    
+    configure :production do
+      disable :raise_errors # so error handlers work
+    end
+    
     helpers do
       include Helpers::Base
       include Helpers::AssetHost
