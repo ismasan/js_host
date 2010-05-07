@@ -38,14 +38,12 @@ module JsHost
     end
     
     class Project < ActiveRecord::Base
-      # belongs_to :account
+      include Sluggable
+      
       has_many :versions, :dependent => :destroy
+      
     end
-
-    class HostedFile < ActiveRecord::Base
-      belongs_to :version
-    end
-
+    
     class Version < ActiveRecord::Base
 
       belongs_to :project
@@ -56,15 +54,29 @@ module JsHost
       def version_string
         [major, minor, patch].join('.')
       end
+      
+      def to_param
+        version_string
+      end
 
       def self.resolve_latest(major, minor = nil, patch = nil)
         r = where(:major => major)
         r = r.where(:minor => minor) if minor
         r = r.where(:patch => patch) if patch
 
-        r.sorted_by_version.first or raise VersionNotFound.new({:major => major, :minor => minor, :patch => patch})
+        r.sorted_by_version.includes(:hosted_file).first
+      end
+      
+      def self.resolve_latest!(*args)
+        resolve_latest(*args) or raise VersionNotFound.new({:major => major, :minor => minor, :patch => patch})
       end
 
+    end
+    
+    class HostedFile < ActiveRecord::Base
+      include Sluggable
+      
+      belongs_to :version
     end
 
   end

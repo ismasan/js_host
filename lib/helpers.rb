@@ -16,15 +16,11 @@ module JsHost
     
     module AssetHost
       def current_project
-        @current_project ||= Models::Project.find_by_slug(params[:project_id]) or halt(404, 'Not Found')
-      end
-      
-      def current_file
-        @current_file ||= current_project.hosted_files.find_by_slug(params[:file]) or halt(404, 'Not Found')
+        @current_project ||= Models::Project.find_by_slug!(params[:project_id])
       end
       
       def current_version
-        @current_version ||= current_file.versions.resolve_latest(params[:major], params[:minor], params[:patch])
+        @current_version ||= current_project.versions.resolve_latest!(params[:major], params[:minor], params[:patch])
       end
       
       def minify(body)
