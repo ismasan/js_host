@@ -81,12 +81,11 @@ module JsHost
         r = where(:major => major)
         r = r.where(:minor => minor) if minor
         r = r.where(:patch => patch) if patch
-
         r.abc.includes(:hosted_file).first
       end
       
       def self.resolve_latest!(*args)
-        resolve_latest(*args) or raise VersionNotFound.new({:major => major, :minor => minor, :patch => patch})
+        resolve_latest(*args) or raise Sinatra::NotFound
       end
 
     end
@@ -111,7 +110,7 @@ module JsHost
     end
 
     class Account < ActiveRecord::Base
-      has_many :projects
+      has_many :projects, :dependent => :destroy
       has_many :tokens
 
       after_create :generate_token

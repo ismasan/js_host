@@ -11,11 +11,6 @@ module JsHost
     enable :dump_errors
     enable :raise_errors
     
-    error JsHost::Models::VersionNotFound do
-      logger.warn request.env['sinatra.error'].message
-      halt 404, request.env['sinatra.error'].message
-    end
-    
     helpers do
       include Helpers::Base
     end
