@@ -2,6 +2,16 @@
 
 Dir['lib/tasks/**/*.rake'].each { |t| load t }
 
+require 'spec/rake/spectask'
+
+Spec::Rake::SpecTask.new(:spec) do |spec|
+  spec.libs << 'lib' << 'spec'
+  spec.spec_files = FileList['spec/**/*_spec.rb']
+  spec.spec_opts = ['--color','--backtrace','--diff']
+end
+
+task :default => :spec
+
 namespace :db do
   
   desc 'load environment'
