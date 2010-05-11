@@ -15,7 +15,7 @@ describe JsHost::AssetHost do
     @account = Factory(:account)
     @project = Factory(:project, :name => 'demo', :account => @account)
     @v1_1_1 = create_version(@project, '1.1.1') do |f|
-      %(
+      f.body = %(
         // Comment 1.1.1
         
         function foo1_1_1(bar){
@@ -25,7 +25,7 @@ describe JsHost::AssetHost do
     end
     
     @v1_1_2 = create_version(@project, '1.1.2') do |f|
-      %(
+      f.body = %(
         // Comment 1.1.2
         
         function foo1_1_2(bar){
@@ -35,7 +35,7 @@ describe JsHost::AssetHost do
     end
     
     @v1_2_0 = create_version(@project, '1.2.0') do |f|
-      %(
+      f.body = %(
         // Comment 1.2.0
         
         function foo1_2_0(bar){
@@ -120,15 +120,37 @@ describe JsHost::AssetHost do
     end
 
     describe '/:project_id/:major/:file.js' do
-      it 'should default to latest minor and patch version'
-      it 'should set HTTP time-based caching headers'
-      it 'should set HTTP etag caching headers'      
+      
+      describe 'when resource found' do
+        before { get version_path(@v1_2_0, '1') }
+        
+        it 'should default to latest minor and patch version' do
+          last_response.body.should == @v1_2_0.hosted_file.body
+        end
+
+        it 'should set HTTP time-based caching headers' do
+          last_response.headers['Cache-Control'].should == "public, max-age=300"
+        end
+
+        it 'should set HTTP etag caching headers' do
+          last_response.headers['Etag'].gsub('"','').should == @v1_2_0.etag.to_s
+        end
+      end
+      
+      describe 'when resource not found' do
+        it 'should respond with status 404' do
+          get version_path(@v1_2_0, '2')
+          last_response.status.should == 404
+        end
+      end
+           
     end
 
     describe '/:project_id/:major/:file.min.js' do
-      it 'should default to minified latest minor and patch version'
-      it 'should set HTTP time-based caching headers'
-      it 'should set HTTP etag caching headers'      
+      it 'should default to minified latest patch version' do
+        get version_path(@v1_2_0, '1', true)
+        last_response.body.should == "function foo1_2_0(a){return 2*a};\n"
+      end      
     end
   end
   

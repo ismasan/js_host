@@ -17,7 +17,7 @@ def create_version(project, version_string)
     :manifest => '{}'
   )
   file = Factory.build(:hosted_file)
-  file.body = yield if block_given?
+  yield file if block_given?
   v.hosted_file = file
   v.save!
   v
