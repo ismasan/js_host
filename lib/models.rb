@@ -110,11 +110,22 @@ module JsHost
     end
 
     class Account < ActiveRecord::Base
+      
+      class VersionExists < RuntimeError;end
+      
       has_many :projects, :dependent => :destroy
       has_many :tokens
 
       after_create :generate_token
-
+      
+      def key
+        tokens.last.key
+      end
+      
+      def secret
+        tokens.last.secret
+      end
+      
       def create_or_update_project!(manifest, file)
         manifest_json = JSON.parse(manifest)
 
