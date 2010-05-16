@@ -6,10 +6,11 @@ end
 
 describe JsHost::Api do
   
-  before :all do
-    logger = Logger.new("#{File.dirname(__FILE__)}/../log/test.log")
-
-    JsHost::Base.use Rack::CommonLogger, logger
+  before :each do
+    Account.destroy_all
+    # logger = Logger.new("#{File.dirname(__FILE__)}/../log/test.log")
+    # 
+    #     JsHost::Base.use Rack::CommonLogger, logger
   end
   
   describe 'PUT /api/accounts' do
