@@ -61,7 +61,7 @@ module JsHost
       end
       
       def authenticate!
-        request = Signature::Request.new('PUT', env["REQUEST_PATH"], hash_query_string)
+        request = Signature::Request.new(env['REQUEST_METHOD'], env["PATH_INFO"], hash_query_string)
         token = request.authenticate do |key|
           Token.find_by_key!(key)
         end

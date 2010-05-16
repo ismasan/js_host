@@ -22,3 +22,13 @@ def create_version(project, version_string)
   v.save!
   v
 end
+
+def signature_querystring(verb, path, key, secret)
+  token = Signature::Token.new(key, secret)
+  request = Signature::Request.new(verb, path, {})
+  auth_hash = request.sign(token)
+
+  auth_hash.keys.inject([]) do |array, key|
+    array << "#{URI.encode(key.to_s)}=#{URI.encode(auth_hash[key].to_s)}"
+  end.join('&')
+end
