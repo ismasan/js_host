@@ -133,13 +133,13 @@ module JsHost
           project = projects.find_or_create_by_name(manifest_json['project'])
           version = project.versions.find_by_version_string(manifest_json['version'])
           
-          raise 'Version already exists' if version
+          raise VersionExists, 'Version already exists' if version
           
           project.versions.create!(
             :version_string => manifest_json['version'],
             :manifest => manifest,
             :hosted_file => HostedFile.new(
-              :name => manifest['file'],
+              :name => manifest_json['file'],
               :body => file
             )
           )
