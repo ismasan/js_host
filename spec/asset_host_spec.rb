@@ -1,15 +1,15 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-def app
-  JsHost::AssetHost
-end
-
 def version_path(version, version_string, min = false)
   m = min ? '.min' : ''
   "/#{version.project.to_param}/#{version_string}/#{version.hosted_file.to_param}#{m}.js"
 end
 
 describe JsHost::AssetHost do
+  
+  def app
+    JsHost::AssetHost
+  end
   
   before do
     clear_database!

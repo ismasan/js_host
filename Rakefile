@@ -10,13 +10,7 @@ Spec::Rake::SpecTask.new(:spec) do |spec|
   spec.spec_opts = ['--color','--backtrace','--diff']
 end
 
-task :default => :hacked_spec_task
-
-task :hacked_spec_task do
-  FileList['spec/**/*_spec.rb'].each do |f|
-    system "spec #{f}"
-  end
-end
+task :default => :spec
 
 namespace :db do
   

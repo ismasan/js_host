@@ -1,10 +1,10 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-def app
-  JsHost::Api
-end
-
 describe JsHost::Api do
+  
+  def app
+    JsHost::Api
+  end
   
   before :each do
     clear_database!
