@@ -12,7 +12,7 @@ end
 describe JsHost::AssetHost do
   
   before do
-    Account.destroy_all
+    clear_database!
     @account = Factory(:account)
     @project = Factory(:project, :name => 'demo', :account => @account)
     @v1_1_1 = create_version(@project, '1.1.1') do |f|

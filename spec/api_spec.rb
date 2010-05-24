@@ -7,7 +7,7 @@ end
 describe JsHost::Api do
   
   before :each do
-    Account.destroy_all
+    clear_database!
     # logger = Logger.new("#{File.dirname(__FILE__)}/../log/test.log")
     # 
     #     JsHost::Base.use Rack::CommonLogger, logger

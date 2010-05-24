@@ -1,7 +1,7 @@
 require 'js_host'
 
 app = Rack::URLMap.new(
-  '/'             => JsHost::AssetHost,
-  '/api'          => JsHost::Api
+  '/api'             => JsHost::Api,
+  '/'          => JsHost::AssetHost
 )
 run app
